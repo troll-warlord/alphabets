@@ -35,6 +35,9 @@
       <button class="btn btn-danger mt-3 restart" @click="resetGame">
         Restart
       </button>
+      <button class="btn btn-primary mt-3 show-score" @click="showScore">
+        Show Score
+      </button>
     </div>
 
     <!-- Right panel: current image and alphabet buttons -->
@@ -89,7 +92,6 @@ export default {
   },
   computed: {
     currentImage() {
-      console.log(this.shuffledImages);
       return this.shuffledImages[this.currentIndex] || {};
     },
   },
@@ -108,6 +110,9 @@ export default {
       this.currentIndex = 0;
       this.answers = [];
       this.feedback = null;
+    },
+    showScore() {
+      this.$emit("gameOver", this.answers);
     },
     selectLetter(letter) {
       if (this.feedback !== null) return;
@@ -166,5 +171,8 @@ img {
 .image-fixed {
   width: 350px; /* or 100% in a container */
   height: 350px;
+}
+.show-score {
+  float: right;
 }
 </style>

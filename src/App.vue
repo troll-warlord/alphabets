@@ -48,16 +48,6 @@ export default {
         src: imagesContext(key),
       };
     });
-    // const imagesContext = import.meta.globEager("./assets/images/*.jpg");
-    // this.images = Object.entries(imagesContext).map(([path, module]) => {
-    //   const filename = path.split("/").pop();
-    //   return {
-    //     src: module.default,
-    //     name: filename.replace(".jpg", ""),
-    //   };
-    // });
-
-    console.log(this.images);
   },
   methods: {
     startGame() {
