@@ -32,10 +32,18 @@
           </div>
         </li>
       </ul>
-      <button class="btn btn-danger mt-3 restart" @click="resetGame">
+      <button
+        class="btn btn-danger mt-3 restart"
+        v-if="this.answers.length > 0"
+        @click="resetGame"
+      >
         Restart
       </button>
-      <button class="btn btn-primary mt-3 show-score" @click="showScore">
+      <button
+        class="btn btn-primary mt-3 show-score"
+        v-if="this.answers.length > 0"
+        @click="showScore"
+      >
         Show Score
       </button>
     </div>
