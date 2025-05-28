@@ -65,7 +65,26 @@
         />
       </div>
 
-      <div class="d-flex flex-wrap justify-content-center gap-2">
+      <form @submit.prevent="submitAnswer">
+        <div class="d-flex align-items-center">
+          <input
+            ref="answerInput"
+            v-model="userAnswer"
+            maxlength="1"
+            class="form-control d-inline-block text-center input-highlight"
+            @input="handleInput"
+          />
+          <div v-if="userAnswer" class="ms-2">
+            <i
+              v-if="feedback == 'correct'"
+              class="bi bi-check-circle-fill text-success fs-1"
+            ></i>
+            <i v-else class="bi bi-x-circle-fill text-danger fs-1"></i>
+          </div>
+        </div>
+      </form>
+
+      <!-- <div class="d-flex flex-wrap justify-content-center gap-2">
         <button
           v-for="letter in letters"
           :key="letter"
@@ -75,7 +94,7 @@
         >
           {{ letter }}
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -94,6 +113,7 @@ export default {
       shuffledImages: [],
       currentIndex: 0,
       answers: [],
+      userAnswer: "",
       feedback: null,
       letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
     };
@@ -103,10 +123,19 @@ export default {
       return this.shuffledImages[this.currentIndex] || {};
     },
   },
+  mounted() {
+    this.$refs.answerInput.focus();
+  },
   created() {
     this.initGame();
+    this.focusInput();
   },
   methods: {
+    handleInput(event) {
+      const letter = event.target.value.toUpperCase().slice(0, 1);
+      this.userAnswer = letter;
+      this.selectLetter(letter);
+    },
     shuffle(array) {
       return array
         .map((value) => ({ value, sort: Math.random() }))
@@ -121,6 +150,11 @@ export default {
     },
     showScore() {
       this.$emit("gameOver", this.answers);
+    },
+    focusInput() {
+      this.$nextTick(() => {
+        this.$refs.answerInput?.focus();
+      });
     },
     selectLetter(letter) {
       if (this.feedback !== null) return;
@@ -139,6 +173,8 @@ export default {
       setTimeout(() => {
         this.feedback = null;
         this.currentIndex++;
+        this.userAnswer = ""; // ⬅️ Clear the input field
+        this.focusInput();
 
         if (this.currentIndex >= this.shuffledImages.length) {
           this.$emit("gameOver", this.answers);
@@ -182,5 +218,21 @@ img {
 }
 .show-score {
   float: right;
+}
+form {
+  width: 50px;
+}
+.input-highlight {
+  width: 60px;
+  height: 60px;
+  font-size: 2rem;
+  padding: 0;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+}
+.input-highlight:focus {
+  border: 2px solid #007bff;
+  box-shadow: 0 0 8px #007bff;
+  outline: none;
 }
 </style>
